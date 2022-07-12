@@ -200,6 +200,8 @@ class _GadgetConfig:
         controlheader_path = join(func_path, "control/header/h")
         _mkdir(controlheader_path)
         _symlink(controlheader_path, join(func_path, "control/class/ss/h"))
+        _mkdir(join(func_path, "streaming/mjpeg/m"))
+        _mkdir(join(func_path, "streaming/uncompressed/u"))
         self.__add_streaming_frame(func_path, 640, 480, "mjpeg", "m")
         self.__add_streaming_frame(func_path, 1280, 720, "mjpeg", "m")
         self.__add_streaming_frame(func_path, 1920, 1080, "mjpeg", "m")
@@ -218,7 +220,8 @@ class _GadgetConfig:
 
     def __add_streaming_frame(self, func_path: str, width: int, height: int, format: str, name: str) -> None:
         frame = f"streaming/{format}/{name}/{height}p"
-        frame_path = _mkdir(join(func_path, frame))
+        frame_path = join(func_path, frame)
+        _mkdir(frame_path)
         _write(join(frame_path, "wWidth"), int(width))
         _write(join(frame_path, "wHeight"), int(height))
         _write(join(frame_path, "dwMaxVideoFrameBufferSize"), int(width * height * 2))
