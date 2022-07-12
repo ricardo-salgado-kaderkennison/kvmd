@@ -552,6 +552,11 @@ def _get_config_scheme() -> Dict:
                     "kvm_mac":  Option("",    type=valid_mac, if_empty=""),
                 },
 
+                "webcam": {
+                    "enabled": Option(False, type=valid_bool),
+                    "streaming_maxpacket": Option(1024, type=valid_number),
+                },
+
                 "drives": {
                     "enabled": Option(False, type=valid_bool),
                     "count":   Option(1,     type=valid_int_f1),
