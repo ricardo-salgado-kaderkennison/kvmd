@@ -214,7 +214,7 @@ class _GadgetConfig:
         _symlink(streamingheader_path, join(func_path, "streaming/class/hs/h"))
         #_symlink(join(func_path, "streaming/uncompressed/u"), join(streamingheader_path, "u"))
         #_symlink(join(func_path, "streaming/mjpeg/m"), join(streamingheader_path, "m"))
-        _write(join(func_path,"streaming_maxpacket", int(maxpacket)))
+        _write(join(func_path,"streaming_maxpacket"), int(maxpacket))
         _symlink(func_path, join(self.__profile_path, func))
         self.__create_meta(func, name)
 
