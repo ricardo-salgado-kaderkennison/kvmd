@@ -192,6 +192,43 @@ class _GadgetConfig:
         self.__create_meta(func, name)
         self.__msd_instance += 1
 
+    def add_uvc(self, maxpacket: int) -> None:
+        name = "Virtual Webcam"
+        func = "uvc.usb0"
+        func_path = join(self.__gadget_path, "functions", func)
+        _mkdir(func_path)
+        controlheader_path = _mkdir(join(func_path, "control/header/h"))
+        _symlink(controlheader_path, join(func_path, "control/class/fs"))
+        _symlink(controlheader_path, join(func_path, "control/class/ss"))
+        self.__add_streaming_frame(func_path, 640, 480, "mjpeg", "m")
+        self.__add_streaming_frame(func_path, 1280, 720, "mjpeg", "m")
+        self.__add_streaming_frame(func_path, 1920, 1080, "mjpeg", "m")
+        self.__add_streaming_frame(func_path, 640, 480, "uncompressed", "u")
+        self.__add_streaming_frame(func_path, 1280, 720, "uncompressed", "u")
+        self.__add_streaming_frame(func_path, 1920, 1080, "uncompressed", "u")
+        streamingheader_path = _mkdir(join(func, "streaming/header/h"))
+        _symlink(streamingheader_path, join(func_path, "streaming/class/fs"))
+        _symlink(streamingheader_path, join(func_path, "streaming/class/hs"))
+        _symlink(streamingheader_path, join(func_path, "streaming/uncompressed/u"))
+        _symlink(streamingheader_path, join(func_path, "streaming/mjpeg/u"))
+        _write(join(func_path,"streaming_maxpacket", int(maxpacket)))
+        _symlink(func_path, join(self.__profile_path, func))
+        self.__create_meta(func, name)
+
+    def __add_streaming_frame(self, func_path: str, width: int, height: int, format: str, name: str) -> None:
+        frame = f"streaming/{format}/{name}/{height}p"
+        frame_path = _mkdir(join(func_path, frame))
+        _write(join(frame_path, "wWidth"), int(width))
+        _write(join(frame_path, "wHeight"), int(height))
+        _write(join(frame_path, "dwMaxVideoFrameBufferSize"), int(width * height * 2))
+        frameinterval = \
+            """666666
+            100000
+            5000000
+            """
+        _write(join(frame_path, "dwFrameInterval"), frameinterval)        
+
+
     def __create_meta(self, func: str, name: str) -> None:
         _write(join(self.__meta_path, f"{func}@meta.json"), json.dumps({"func": func, "name": name}))
 
@@ -270,6 +307,10 @@ def _cmd_start(config: Section) -> None:  # pylint: disable=too-many-statements,
             for count in range(config.otg.devices.drives.count):
                 logger.info("===== MSD Extra: %d =====", count + 1)
                 gc.add_msd("root", **config.otg.devices.drives.default._unpack())
+
+    if config.otg.devices.webcam.enabled:
+        logger.info("===== Webcam =====")
+        gc.add_uvc(config.otg.devices.webcam.streaming_maxpacket)
 
     logger.info("===== Preparing complete =====")
 
