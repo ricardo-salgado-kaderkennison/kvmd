@@ -208,7 +208,7 @@ class _GadgetConfig:
         self.__add_streaming_frame(func_path, 640, 480, "uncompressed", "u")
         self.__add_streaming_frame(func_path, 1280, 720, "uncompressed", "u")
         self.__add_streaming_frame(func_path, 1920, 1080, "uncompressed", "u")
-        streamingheader_path = join(func, "streaming/header/h")
+        streamingheader_path = join(func_path, "streaming/header/h")
         _mkdir(streamingheader_path)
         _symlink(streamingheader_path, join(func_path, "streaming/class/fs/h"))
         _symlink(streamingheader_path, join(func_path, "streaming/class/hs/h"))
@@ -230,7 +230,7 @@ class _GadgetConfig:
             100000
             5000000
             """
-        _write(join(frame_path, "dwFrameInterval"), frameinterval)        
+        #_write(join(frame_path, "dwFrameInterval"), frameinterval)        
 
 
     def __create_meta(self, func: str, name: str) -> None:
