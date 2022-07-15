@@ -199,6 +199,7 @@ class _GadgetConfig:
         _mkdir(func_path)
         controlheader_path = join(func_path, "control/header/h")
         _mkdir(controlheader_path)
+        _symlink(controlheader_path, join(func_path, "control/class/fs/h"))
         _symlink(controlheader_path, join(func_path, "control/class/ss/h"))
         _mkdir(join(func_path, "streaming/mjpeg/m"))
         _mkdir(join(func_path, "streaming/uncompressed/u"))
