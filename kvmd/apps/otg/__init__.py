@@ -225,11 +225,7 @@ class _GadgetConfig:
         _write(join(frame_path, "wWidth"), int(width))
         _write(join(frame_path, "wHeight"), int(height))
         _write(join(frame_path, "dwMaxVideoFrameBufferSize"), int(width * height * 2))
-        frameinterval = \
-            """666666
-            100000
-            5000000
-            """
+        frameinterval = "666666\n100000\n5000000\n"
         _write_bytes(join(frame_path, "dwFrameInterval"), bytes(frameinterval, 'utf-8'))        
 
 
