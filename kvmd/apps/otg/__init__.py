@@ -230,7 +230,7 @@ class _GadgetConfig:
             100000
             5000000
             """
-        _write_bytes(join(frame_path, "dwFrameInterval"), frameinterval)        
+        _write_bytes(join(frame_path, "dwFrameInterval"), bytes(frameinterval, 'utf-8'))        
 
 
     def __create_meta(self, func: str, name: str) -> None:
